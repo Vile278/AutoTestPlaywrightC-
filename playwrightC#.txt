@@ -1,0 +1,83 @@
+I. How to setup
+
+1. Ensure you have .NET SDK installed: Make sure you have the .NET SDK installed. You can download it from https://dotnet.microsoft.com/en-us/download
+
+2. Create a new console project: If you don't already have a project, create a new one
+dotnet new xunit -n PlaywrightTests
+cd PlaywrightTests
+
+3 Install Playwright for .NET (Add the Playwright package to your project)
+dotnet add package Microsoft.Playwright
+
+4. Install Playwright Browsers
+After installing Playwright, you also need to install the browser binaries that Playwright will use for automation (Chromium, Firefox, and WebKit). Run the following command:
+playwright install
+
+5. Write Your First Playwright Script
+Edit  Program.cs
+
+II. Run test
+
+Script 1: one Test 
+1. Open site on local http://localhost:8000/
+2. Run Test in the folder D:\AllinOne\playwrightCsharp\PlaywrightTest
+cmd >> dotnet run
+
+Script 2: more tests in more .cs file
+1. Open site on local http://localhost:8000/
+2. Run Test in the folder D:\AllinOne\playwrightCsharp\PlaywrightLoginTests
+cmd >> dotnet test
+
+
+III. Gen the report
+
+1. Run the command below to create to file D:\AllinOne\playwrightCsharp\PlaywrightLoginTests\TestResults\test-results.trx
+dotnet test --logger "trx;LogFileName=test-results.trx"
+
+2. Install tool (optional, do it one time) 
+dotnet tool install -g dotnet-reportgenerator-globaltool
+
+
+3. Gen .htm file from .trx file
+reportgenerator -reports:test-results.trx -targetdir:TestReports
+
+IV. basic C#
+
+1. Common Playwright Operations in C#
+	Navigate to a page: 
+		await page.GotoAsync(loginUrl);
+
+	Click an element: 
+		await page.ClickAsync("#Submit");
+		
+	Fill a form field: 
+		await page.FillAsync("#UserName", username);
+		
+	Wait for an element to appear: 
+		await page.WaitForSelectorAsync("#UserName", new PageWaitForSelectorOptions { State = WaitForSelectorState.Visible });
+		
+	Check element visibility: 
+	
+        bool isLogoutVisible = await IsElementVisibleAsync(page, "text=Log out", 00);
+        Assert.True(isLogoutVisible, "Logout element should be visible after login");
+	 with or without opening browser while running test
+	 Headless = false/true
+	 _browser = await _playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = false });
+2. Basic C# Language
+	extend class
+		public class LoginTests2 : BaseTest
+	attribute [Fact] to denote that a method is a test method.
+	async and await:
+		In C#, the async keyword is typically used in conjunction with the await keyword, which enables the method to wait for asynchronous operations to complete without blocking the calling thread
+
+V. Locate an element
+	1. locate by ID:
+		await page.ClickAsync("#Submit"); 
+	2. locate by CSS Selector
+		await page.Locator("#Submit").ClickAsync(); 
+	3.  by xPath
+		await page.Locator("//*[@id='Submit']").ClickAsync();
+	4. by Name attribute
+		await page.Locator("[name='Submit']").ClickAsync(); 
+	5. By Link Text (for hyperlinks)
+		await page.ClickAsync("text='Log in'"); 
